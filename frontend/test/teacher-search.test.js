@@ -4,15 +4,20 @@ process.env.NODE_ENV = "test";
 fixture`Testing Teacher UI`
     .page`http://localhost:4401/`
 
-test('Testing search Teachers', async t => {
+test('Testing add teachers', async t => {
+    await t.navigateTo("/dbinitialize");
+
+    await t.navigateTo("/addTeacher");
+    await t.typeText("#teacher-id", "123456");
+    await t.typeText("#teacher-name", "Mohan Perera");
+    await t.typeText("#teacher-age", "45");
+    await t.click("#teacher-add");
+
     await t.navigateTo("/");
-    await t.typeText("#teacher-search", "su");
 
     const table = Selector('#teacher-table')
     const rowCount = await table.find('tr').count;
 
-    let tdText = await table.find('tr').nth(rowCount-1).innerText;
-    await t.expect(rowCount).eql(2)
-
-    await t.navigateTo("/dbinitialize");
+    let tdText = await table.find('tr').nth(rowCount - 1).innerText;
+    await t.expect(tdText).contains("Mohan Perera");
 });
